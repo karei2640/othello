@@ -3,55 +3,322 @@
 <head>
   <title>オセロゲーム</title>
   <style>
-    table {
-      border-collapse: collapse;
+    #game-board {
+      width: 400px;
+      height: 400px;
+      border: 2px solid black;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
     }
 
-    td {
-      width: 50px;
-      height: 50px;
+    .row {
+      display: flex;
+      flex-wrap: nowrap;
+    }
+
+    .cell {
+      width: 48px;
+      height: 48px;
       border: 1px solid black;
+      box-sizing: border-box;
       cursor: pointer;
     }
-  </style>
-  <script>
-    // セルをクリックしたときの処理
-    function cellClicked(row, col) {
-      // クリックされたセルの行と列を表示（例：alert(row + ', ' + col);）
-      alert(row + ', ' + col);
+
+    .black {
+      background-color: #000;
     }
-  </script>
+
+    .white {
+      background-color: #fff;
+    }
+  </style>
 </head>
 <body>
-  <table>
-    <tbody>
-      <!-- 8x8のゲームボードを作成 -->
-      <!-- 各セルに対してイベントハンドラを設定 -->
-      <!-- クリック時にcellClicked関数を呼び出す -->
-      <!-- 引数として行番号と列番号を渡す -->
-      <tr>
-        <td onclick="cellClicked(0, 0)"></td>
-        <td onclick="cellClicked(0, 1)"></td>
-        <td onclick="cellClicked(0, 2)"></td>
-        <td onclick="cellClicked(0, 3)"></td>
-        <td onclick="cellClicked(0, 4)"></td>
-        <td onclick="cellClicked(0, 5)"></td>
-        <td onclick="cellClicked(0, 6)"></td>
-        <td onclick="cellClicked(0, 7)"></td>
-      </tr>
-      <!-- 他の行も同様にセルを作成 -->
-      <!-- 中略 -->
-      <tr>
-        <td onclick="cellClicked(7, 0)"></td>
-        <td onclick="cellClicked(7, 1)"></td>
-        <td onclick="cellClicked(7, 2)"></td>
-        <td onclick="cellClicked(7, 3)"></td>
-        <td onclick="cellClicked(7, 4)"></td>
-        <td onclick="cellClicked(7, 5)"></td>
-        <td onclick="cellClicked(7, 6)"></td>
-        <td onclick="cellClicked(7, 7)"></td>
-      </tr>
-    </tbody>
-  </table>
+  <div id="game-board">
+    <div class="row">
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+    </div>
+    <div class="row">
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+    </div>
+    <div class="row">
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+    </div>
+    <div class="row">
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+    </div>
+    <div class="row">
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+    </div>
+    <div class="row">
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+    </div>
+    <div class="row">
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+    </div>
+    <div class="row">
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+    </div>
+  </div>
+
+  <script>
+    // ゲームボードの要素を取得
+var gameBoard = document.getElementById('game-board');
+
+// ゲームの状態を表す変数
+var currentPlayer = 'black';
+var gameOver = false;
+
+// ゲームボードの状態を表す2次元配列
+var boardState = [
+  ['', '', '', '', '', '', '', ''],
+  ['', '', '', '', '', '', '', ''],
+  ['', '', '', '', '', '', '', ''],
+  ['', '', '', 'black', 'white', '', '', ''],
+  ['', '', '', 'white', 'black', '', '', ''],
+  ['', '', '', '', '', '', '', ''],
+  ['', '', '', '', '', '', '', ''],
+  ['', '', '', '', '', '', '', '']
+];
+
+// ゲームボードを初期化
+function initializeBoard() {
+  // 各セルのクリックイベントを設定
+  for (var i = 0; i < 8; i++) {
+    for (var j = 0; j < 8; j++) {
+      var cell = gameBoard.children[i].children[j];
+      cell.addEventListener('click', handleClick);
+    }
+  }
+
+  // ゲームボードの状態を反映
+  updateBoardState();
+}
+
+// セルがクリックされたときの処理
+function handleClick(event) {
+  if (gameOver) {
+    return;
+  }
+
+  var row = event.target.parentNode.rowIndex;
+  var col = event.target.cellIndex;
+
+  if (isValidMove(row, col)) {
+    placeStone(row, col);
+    flipStones(row, col);
+    switchPlayer();
+    updateBoardState();
+    checkGameOver();
+  }
+}
+
+// 石を置く処理
+function placeStone(row, col) {
+  boardState[row][col] = currentPlayer;
+}
+
+// 石を裏返す処理
+function flipStones(row, col) {
+  var directions = [
+    { dx: -1, dy: -1 }, // 左上
+    { dx: 0, dy: -1 },  // 上
+    { dx: 1, dy: -1 },  // 右上
+    { dx: -1, dy: 0 },  // 左
+    { dx: 1, dy: 0 },   // 右
+    { dx: -1, dy: 1 },  // 左下
+    { dx: 0, dy: 1 },   // 下
+    { dx: 1, dy: 1 }    // 右下
+  ];
+
+  for (var i = 0; i < directions.length; i++) {
+    var dx = directions[i].dx;
+    var dy = directions[i].dy;
+    var stonesToFlip = [];
+
+    var x = col + dx;
+    var y = row + dy;
+
+    while (isValidPosition(x, y) && boardState[y][x] === getOpponentPlayer()) {
+      stonesToFlip.push({ x: x, y: y });
+      x += dx;
+      y += dy;
+    }
+
+    if (isValidPosition(x, y) && boardState[y][x] === currentPlayer) {
+      for (var j = 0; j < stonesToFlip.length; j++) {
+        var flipX = stonesToFlip[j].x;
+        var flipY = stonesToFlip[j].y;
+        boardState[flipY][flipX] = currentPlayer;
+      }
+    }
+  }
+}
+
+// プレイヤーの交代
+function switchPlayer() {
+  currentPlayer = currentPlayer === 'black' ? 'white' : 'black';
+}
+
+// ゲームボードの状態を更新
+function updateBoardState() {
+  for (var i = 0; i < 8; i++) {
+    for (var j = 0; j < 8; j++) {
+      var cell = gameBoard.children[i].children[j];
+      cell.className = 'cell ' + boardState[i][j];
+    }
+  }
+}
+
+// 指定された座標が有効な位置かチェック
+function isValidPosition(row, col) {
+  return row >= 0 && row < 8 && col >= 0 && col < 8;
+}
+
+// 指定された座標に石を置くことができるかチェック
+function isValidMove(row, col) {
+  return boardState[row][col] === '' && canFlipStones(row, col);
+}
+
+// 指定された座標の周囲に石を裏返すことができるかチェック
+function canFlipStones(row, col) {
+  var directions = [
+    { dx: -1, dy: -1 }, // 左上
+    { dx: 0, dy: -1 },  // 上
+    { dx: 1, dy: -1 },  // 右上
+    { dx: -1, dy: 0 },  // 左
+    { dx: 1, dy: 0 },   // 右
+    { dx: -1, dy: 1 },  // 左下
+    { dx: 0, dy: 1 },   // 下
+    { dx: 1, dy: 1 }    // 右下
+  ];
+
+  for (var i = 0; i < directions.length; i++) {
+    var dx = directions[i].dx;
+    var dy = directions[i].dy;
+
+    var x = col + dx;
+    var y = row + dy;
+
+    if (isValidPosition(x, y) && boardState[y][x] === getOpponentPlayer()) {
+      x += dx;
+      y += dy;
+
+      while (isValidPosition(x, y) && boardState[y][x] === getOpponentPlayer()) {
+        x += dx;
+        y += dy;
+      }
+
+      if (isValidPosition(x, y) && boardState[y][x] === currentPlayer) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+// 相手プレイヤーを取得
+function getOpponentPlayer() {
+  return currentPlayer === 'black' ? 'white' : 'black';
+}
+
+// ゲーム終了条件をチェック
+function checkGameOver() {
+  var blackCount = 0;
+  var whiteCount = 0;
+
+  for (var i = 0; i < 8; i++) {
+    for (var j = 0; j < 8; j++) {
+      if (boardState[i][j] === 'black') {
+        blackCount++;
+      } else if (boardState[i][j] === 'white') {
+        whiteCount++;
+      }
+    }
+  }
+
+  if (blackCount === 0 || whiteCount === 0 || blackCount + whiteCount === 64) {
+    gameOver = true;
+    var message = '';
+
+    if (blackCount > whiteCount) {
+      message = '黒の勝利！';
+    } else if (whiteCount > blackCount) {
+      message = '白の勝利！';
+    } else {
+      message = '引き分け！';
+    }
+
+    alert(message);
+  }
+}
+
+// ゲームの初期化
+function initializeGame() {
+  initializeBoard();
+}
+
+// ゲームの実行
+initializeGame();
+
+  </script>
 </body>
 </html>
