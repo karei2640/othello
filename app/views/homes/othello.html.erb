@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>オセロゲーム</title>
+  <style>
+    table {
+      border-collapse: collapse;
+    }
+
+    td {
+      width: 50px;
+      height: 50px;
+      border: 1px solid black;
+      cursor: pointer;
+    }
+  </style>
+  <script>
+    // セルをクリックしたときの処理
+    function cellClicked(row, col) {
+      // クリックされたセルの行と列を表示（例：alert(row + ', ' + col);）
+      alert(row + ', ' + col);
+    }
+  </script>
+</head>
+<body>
+  <table>
+    <tbody>
+      <!-- 8x8のゲームボードを作成 -->
+      <!-- 各セルに対してイベントハンドラを設定 -->
+      <!-- クリック時にcellClicked関数を呼び出す -->
+      <!-- 引数として行番号と列番号を渡す -->
+      <tr>
+        <td onclick="cellClicked(0, 0)"></td>
+        <td onclick="cellClicked(0, 1)"></td>
+        <td onclick="cellClicked(0, 2)"></td>
+        <td onclick="cellClicked(0, 3)"></td>
+        <td onclick="cellClicked(0, 4)"></td>
+        <td onclick="cellClicked(0, 5)"></td>
+        <td onclick="cellClicked(0, 6)"></td>
+        <td onclick="cellClicked(0, 7)"></td>
+      </tr>
+      <!-- 他の行も同様にセルを作成 -->
+      <!-- 中略 -->
+      <tr>
+        <td onclick="cellClicked(7, 0)"></td>
+        <td onclick="cellClicked(7, 1)"></td>
+        <td onclick="cellClicked(7, 2)"></td>
+        <td onclick="cellClicked(7, 3)"></td>
+        <td onclick="cellClicked(7, 4)"></td>
+        <td onclick="cellClicked(7, 5)"></td>
+        <td onclick="cellClicked(7, 6)"></td>
+        <td onclick="cellClicked(7, 7)"></td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>
